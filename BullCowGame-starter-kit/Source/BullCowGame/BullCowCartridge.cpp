@@ -42,32 +42,50 @@ void UBullCowCartridge::SetupGame()
 void UBullCowCartridge::EndGame()
 {
     bGameOver = true;
-    PrintLine(TEXT("Press Enter to play again"));
+    PrintLine(TEXT("\nPress Enter to play again"));
 
 }
 
 void UBullCowCartridge::ProcessGuess(FString Guess) 
 {
     if (HiddenWord == Guess) 
-        {
-            PrintLine(TEXT("You have won!"));
-            EndGame();
-        } 
-        else 
-        {
-            PrintLine(TEXT("Lost a life!"));
-            PrintLine(TEXT("Lives remaining: %i"), --Lives);
-            if (Lives > 0) 
-            {
-                if (HiddenWord.Len() != Guess.Len()) 
-                {
-                    PrintLine(TEXT("Remember it is a %i letter word"), HiddenWord.Len());
-                }
-            }
-            else {
-                PrintLine(TEXT("You have no lives left!"));
-                EndGame();
-            }
+    {
+        PrintLine(TEXT("You have won!"));
+        EndGame();
+        return;
+    }
+    else 
+    {
+        PrintLine(TEXT("You lost of a life!"));
+        --Lives;
 
+        // Check if isogram
+        if (IsIsogram(Guess))
+        {
+            /* Code */
+            PrintLine(TEXT("No repeating letters, guess again"));
         }
+
+        if (HiddenWord.Len() != Guess.Len()) 
+        {
+            PrintLine(TEXT("Remember it is a %i letter word"), HiddenWord.Len());
+        }
+
+        
+        if (Lives <= 0) 
+        {
+            ClearScreen();
+            PrintLine(TEXT("You have no lives left!"));
+            PrintLine(TEXT("The hidden word was %s: "), *HiddenWord);
+            EndGame();
+            return;
+        }
+
+        // Show the palyer the bulls and cows
+    }
+}
+
+bool UBullCowCartridge::IsIsogram(FString guess)
+{
+    return true;
 }
