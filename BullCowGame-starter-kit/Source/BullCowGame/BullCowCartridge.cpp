@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
+#include <map>
 
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
@@ -59,10 +60,9 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
         PrintLine(TEXT("You lost of a life!"));
         --Lives;
 
-        // Check if isogram
-        if (IsIsogram(Guess))
+        // Check if guess was not an isogram
+        if (!IsIsogram(Guess))
         {
-            /* Code */
             PrintLine(TEXT("No repeating letters, guess again"));
         }
 
@@ -85,7 +85,16 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
     }
 }
 
-bool UBullCowCartridge::IsIsogram(FString guess)
+bool UBullCowCartridge::IsIsogram(FString word)
 {
+    int hash[123] = {};
+    for(int i = 0; i < word.Len(); i++) 
+    {
+        hash[word[i]] += 1;
+        if(hash[word[i]] == 2) 
+        {
+            return false;
+        }
+    }
     return true;
 }
