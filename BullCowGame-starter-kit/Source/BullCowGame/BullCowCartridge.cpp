@@ -60,15 +60,15 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
         PrintLine(TEXT("You lost of a life!"));
         --Lives;
 
+        if (HiddenWord.Len() != Guess.Len()) 
+        {
+            PrintLine(TEXT("Remember it is a %i letter word"), HiddenWord.Len());
+        }
+
         // Check if guess was not an isogram
         if (!IsIsogram(Guess))
         {
             PrintLine(TEXT("No repeating letters, guess again"));
-        }
-
-        if (HiddenWord.Len() != Guess.Len()) 
-        {
-            PrintLine(TEXT("Remember it is a %i letter word"), HiddenWord.Len());
         }
 
         
@@ -85,7 +85,7 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
     }
 }
 
-bool UBullCowCartridge::IsIsogram(FString word)
+bool UBullCowCartridge::IsIsogram(FString word) const
 {
     int hash[123] = {};
     for(int i = 0; i < word.Len(); i++) 
