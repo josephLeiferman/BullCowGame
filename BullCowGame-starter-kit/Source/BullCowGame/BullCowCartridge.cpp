@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
+#include "HiddenWordList.h"
 #include <map>
 
 void UBullCowCartridge::BeginPlay() // When the game starts
@@ -85,13 +86,13 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
     }
 }
 
-bool UBullCowCartridge::IsIsogram(FString word) const
+bool UBullCowCartridge::IsIsogram(FString Word) const
 {
     int hash[123] = {};
-    for(int32 i = 0; i < word.Len(); i++) 
+    for(int32 i = 0; i < Word.Len(); i++) 
     {
-        hash[word[i]] += 1;
-        if(hash[word[i]] == 2) 
+        hash[Word[i]] += 1;
+        if(hash[Word[i]] == 2) 
         {
             return false;
         }
