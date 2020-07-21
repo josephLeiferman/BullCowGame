@@ -88,7 +88,7 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
 bool UBullCowCartridge::IsIsogram(FString word) const
 {
     int hash[123] = {};
-    for(int i = 0; i < word.Len(); i++) 
+    for(int32 i = 0; i < word.Len(); i++) 
     {
         hash[word[i]] += 1;
         if(hash[word[i]] == 2) 
