@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
 #include "Misc/FileHelper.h"
-#include "Misc/Paths.h"
 #include <map>
 
 void UBullCowCartridge::BeginPlay() // When the game starts
@@ -11,12 +10,7 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     // Load word lists from file 
     const FString WordListPath = FPaths::ProjectContentDir() / TEXT("WordList/HiddenWordList.txt");
     FFileHelper::LoadFileToStringArray(Words, *WordListPath);
-    SetupGame();
-    PrintLine(TEXT("The number of possible words is %i"), Words.Num());
-
-   TArray<FString> ValidWords = GetValidWords(Words);
-
-   PrintLine(TEXT("The number of valid words is %i"), ValidWords.Num());
+    SetupGame(GetValidWords(Words));
     
 }
 
@@ -27,7 +21,7 @@ void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player h
     if (bGameOver) 
     {
         ClearScreen();
-        SetupGame();
+        SetupGame(GetValidWords(Words));
     
     }
     else 
@@ -37,9 +31,10 @@ void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player h
 
 }
 
-void UBullCowCartridge::SetupGame() 
+void UBullCowCartridge::SetupGame(const TArray<FString>& ValidWordList) 
 {
-    HiddenWord = TEXT("pugs");
+
+    HiddenWord = ValidWordList[FMath::RandRange(0, ValidWordList.Num())];
     Lives = HiddenWord.Len();
     bGameOver = false;
 
