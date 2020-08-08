@@ -7,6 +7,7 @@
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
+
     // Load word lists from file 
     const FString WordListPath = FPaths::ProjectContentDir() / TEXT("WordList/HiddenWordList.txt");
     FFileHelper::LoadFileToStringArray(Words, *WordListPath);
@@ -19,7 +20,7 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     
 }
 
-void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
+void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player hits enter
 {
     // PrintLine(TEXT("You have %i lives left"), Lives);//  Debug line
 
@@ -31,7 +32,7 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     }
     else 
     {
-        ProcessGuess(Input);
+        ProcessGuess(PlayerInput);
     }
 
 }
@@ -55,7 +56,7 @@ void UBullCowCartridge::EndGame()
 
 }
 
-void UBullCowCartridge::ProcessGuess(FString Guess) 
+void UBullCowCartridge::ProcessGuess(const FString& Guess) 
 {
     if (HiddenWord == Guess) 
     {
@@ -93,7 +94,7 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
     }
 }
 
-bool UBullCowCartridge::IsIsogram(FString Word) const
+bool UBullCowCartridge::IsIsogram(const FString& Word) const
 {
     int hash[123] = {};
     for(int32 i = 0; i < Word.Len(); i++) 
@@ -107,7 +108,7 @@ bool UBullCowCartridge::IsIsogram(FString Word) const
     return true;
 }
 
-TArray<FString> UBullCowCartridge::GetValidWords(TArray<FString> WordList) const
+TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList) const
 {
      TArray<FString> ValidWords;
 
