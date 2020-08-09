@@ -10,7 +10,8 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     // Load word lists from file 
     const FString WordListPath = FPaths::ProjectContentDir() / TEXT("WordList/HiddenWordList.txt");
     FFileHelper::LoadFileToStringArray(Words, *WordListPath);
-    SetupGame(GetValidWords(Words));
+    Isograms = GetValidWords(Words);
+    SetupGame();
     
 }
 
@@ -21,7 +22,7 @@ void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player h
     if (bGameOver) 
     {
         ClearScreen();
-        SetupGame(GetValidWords(Words));
+        SetupGame();
     
     }
     else 
@@ -31,10 +32,11 @@ void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player h
 
 }
 
-void UBullCowCartridge::SetupGame(const TArray<FString>& ValidWordList) 
+void UBullCowCartridge::SetupGame() 
 {
 
-    HiddenWord = ValidWordList[FMath::RandRange(0, ValidWordList.Num())];
+    HiddenWord = Isograms[FMath::RandRange(0, Isograms.Num() - 1)];
+    PrintLine(TEXT("The hidden word was %s: "), *HiddenWord);
     Lives = HiddenWord.Len();
     bGameOver = false;
 
@@ -86,6 +88,9 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess)
         }
 
         // Show the palyer the bulls and cows
+        int32 Bulls, Cows;
+        GetBullCows(Guess, Bulls, Cows);
+        PrintLine(TEXT("You have %i Bulls and %i Cows"), Bulls, Cows);
     }
 }
 
@@ -117,4 +122,27 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
     }
 
     return ValidWords;
+}
+
+void UBullCowCartridge::GetBullCows(const FString& Guess, int32& BullCount, int32& CowCount) const
+{
+    BullCount = 0;
+    CowCount = 0;
+
+    for (int32 GuessIndex = 0; GuessIndex < Guess.Len(); GuessIndex++) 
+    {
+        if (Guess[GuessIndex] == HiddenWord[GuessIndex])
+        {
+            BullCount ++;
+            continue;
+        }
+
+        for (int32 HiddenIndex = 0; HiddenIndex < HiddenWord.Len(); HiddenIndex++)
+        {
+            if (Guess[GuessIndex] == HiddenWord[HiddenIndex])
+            {
+                CowCount ++;
+            }
+        } 
+    }
 }
