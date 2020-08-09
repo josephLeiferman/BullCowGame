@@ -36,8 +36,8 @@ void UBullCowCartridge::SetupGame()
 {
 
     HiddenWord = Isograms[FMath::RandRange(0, Isograms.Num() - 1)];
-    PrintLine(TEXT("The hidden word was %s: "), *HiddenWord); // Debug Line
-    Lives = HiddenWord.Len();
+    // PrintLine(TEXT("The hidden word is: %s"), *HiddenWord); // Debug Line
+    Lives = HiddenWord.Len() * 2;
     bGameOver = false;
 
     PrintLine(TEXT("Welcome to Bull Cows!"));
@@ -114,7 +114,7 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
 
     for(FString Word : WordList) 
     {
-        if(Word.Len() >= 4 && Word.Len() <= 8 && IsIsogram(Word))
+        if(Word.Len() >= 4 && Word.Len() <= 4 && IsIsogram(Word))
         {
            ValidWords.Emplace(Word);
         }
@@ -131,6 +131,7 @@ FBullCowCount UBullCowCartridge::GetBullCows(const FString& Guess) const
     {
         if (Guess[GuessIndex] == HiddenWord[GuessIndex])
         {
+            PrintLine(TEXT("%c was a bull"), Guess[GuessIndex]);
             Count.Bulls++;
             continue;
         }
